@@ -2,7 +2,9 @@ package scheduler
 
 import (
 	"fmt"
+	"log"
 	"sync"
+	"time"
 
 	pkg_errors "github.com/jakewan/gcron/pkg/errors"
 )
@@ -17,6 +19,16 @@ func NewScheduler() Scheduler {
 type Scheduler struct {
 	jobs       map[string]job
 	jobsLocker *sync.RWMutex
+}
+
+// StartScheduler implements gcron.Scheduler.
+func (s Scheduler) StartScheduler() error {
+	panic("unimplemented")
+}
+
+// StopScheduler implements gcron.Scheduler.
+func (s Scheduler) StopScheduler() error {
+	panic("unimplemented")
 }
 
 // AddJob implements gcron.Scheduler.
@@ -58,5 +70,15 @@ func (s Scheduler) StopJob(name string) error {
 		data.started = false
 		s.jobs[name] = data
 		return nil
+	}
+}
+
+func startTicker() {
+	t := time.NewTicker(time.Second)
+	for {
+		select {
+		case ts := <-t.C:
+			log.Print("Tick at ", ts.Format(time.RFC3339Nano))
+		}
 	}
 }

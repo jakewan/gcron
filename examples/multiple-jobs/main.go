@@ -19,6 +19,10 @@ func main() {
 	if err := scheduler.AddJob("Job 2", "1-59/2 * * * * *"); err != nil {
 		log.Fatal(err)
 	} else
+	// Start the scheduler.
+	if err := scheduler.StartScheduler(); err != nil {
+		log.Fatal(err)
+	}
 	// Start the first job.
 	if err := scheduler.StartJob("Job 1"); err != nil {
 		log.Fatal(err)
@@ -35,6 +39,9 @@ func main() {
 			log.Print("Press Ctrl+C to quit")
 			sig := <-sigs
 			log.Print("Received signal: ", sig)
+			if err := scheduler.StopScheduler(); err != nil {
+				log.Print("Error stopping scheduler: ", err)
+			}
 			done <- true
 		}()
 		<-done

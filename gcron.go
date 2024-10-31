@@ -7,7 +7,9 @@ import (
 type Scheduler interface {
 	AddJob(name string, schedule string) error
 	StartJob(name string) error
+	StartScheduler() error
 	StopJob(name string) error
+	StopScheduler() error
 }
 
 func NewScheduler() Scheduler {
